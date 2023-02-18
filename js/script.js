@@ -24,7 +24,7 @@ function titleClickHandler(event){
   targetArticle.classList.add('active');
 }
 
-const optArticleSelector = '.post',optTitleSelector = '.post-title',optTitleListSelector = '.titles',optArticleTagsSelector='.post-tags .list',optAuthorsSelector='.post-author';
+const optArticleSelector = '.post',optTitleSelector = '.post-title',optTitleListSelector = '.titles',optArticleTagsSelector='.post-tags .list',optAuthorsSelector='.post-author',optTagsListSelector='.tags .list';
 
 function generateTitleLinks(customSelector = ''){
 
@@ -58,11 +58,13 @@ function generateTitleLinks(customSelector = ''){
 generateTitleLinks();
 
 function generateTags(){
+  /* [NEW] create a new variable allTags with an empty array */
+  let allTags = [];
   /* find all articles */
   const articles = document.querySelectorAll(optArticleSelector);
   /* START LOOP: for every article: */
   for(let article of articles){
-    article.addEventListener('click', titleClickHandler);
+    
     /* find tags wrapper */
     const wrapperTags = article.querySelector(optArticleTagsSelector);
     /* make html variable with empty string */
@@ -77,12 +79,21 @@ function generateTags(){
       const linkHTML = '<li><a href="#tag-' + tag + '">'+ tag + ' </a></li> ';
       /* add generated code to html variable */
       html = html + linkHTML;
+      /* [NEW] check if this link is NOT already in allTags */
+      if(allTags.indexOf(linkHTML) == -1){
+        /* [NEW] add generated code to allTags array */
+        allTags.push(linkHTML);
+      }
     /* END LOOP: for each tag */
     }
     /* insert HTML of all the links into the tags wrapper */
     wrapperTags.innerHTML=html;
   /* END LOOP: for every article: */
   }
+  /* [NEW] find list of tags in right column */
+  const tagList = document.querySelector(optTagsListSelector);
+  /* [NEW] add html from allTags to tagList */
+  tagList.innerHTML = allTags.join(' ');
 }
 
 generateTags();
@@ -139,7 +150,7 @@ function generateAuthors(){
   console.log(articles);
   /* START LOOP: for every article: */
   for(let article of articles){
-    article.addEventListener('click', titleClickHandler);
+    
     /* find author wrapper */
     const authorTags = article.querySelector(optAuthorsSelector);
     console.log(authorTags);
@@ -206,3 +217,4 @@ function addClickListenersToAuthors(){
 }
 
 addClickListenersToAuthors();
+
