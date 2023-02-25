@@ -73,8 +73,11 @@ function generateTitleLinks(customSelector = ''){
 
 generateTitleLinks();
 
-function calculateTagsParams(tags){
-  const params = tags;
+function calculateMinMax(tags){
+  const params = {
+    min: 999999,
+    max: 0
+  };
   for(let tag in tags){
     console.log(tag + ' is used ' + tags[tag] + ' times');
     if(tags[tag] > params.max){
@@ -84,10 +87,13 @@ function calculateTagsParams(tags){
       params.min = tags[tag];
     }
   }
+  console.log(params);
   return params;
 }
 
-function calculateTagClass(count,params){
+function calculateClass(count,params){
+  console.log(count);
+  console.log(params.min);
   const normalizedCount = count - params.min;
   const normalizedMax = params.max - params.min;
   const percentage = normalizedCount / normalizedMax;
@@ -133,13 +139,13 @@ function generateTags(){
   }
   /* [NEW] find list of tags in right column */
   const tagList = document.querySelector(optTagsListSelector);
-  const tagsParams = calculateTagsParams(allTags);
+  const tagsParams = calculateMinMax(allTags);
   const allTagsData = {tags: []};
   for(let tag in allTags){
     allTagsData.tags.push({
       tag: tag,
       count: allTags[tag],
-      className: calculateTagClass(allTags[tag], tagsParams)
+      className: calculateClass(allTags[tag], tagsParams)
     });
   }
   tagList.innerHTML = templates.tagCloudLink(allTagsData);
@@ -223,13 +229,13 @@ function generateAuthors(){
   /* END LOOP: for every article: */
   }
   const tagList = document.querySelector(optAuthorsListSelector);
-  const tagsParams = calculateTagsParams(allTags);
+  const tagsParams = calculateMinMax(allTags);
   const allTagsData = {tags: []};
   for(let tag in allTags){
     allTagsData.tags.push({
       tag: tag,
       count: allTags[tag],
-      className: calculateTagClass(allTags[tag], tagsParams)
+      className: calculateClass(allTags[tag], tagsParams)
     });
   }
   tagList.innerHTML = templates.authorCloudLink(allTagsData);
