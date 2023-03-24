@@ -3,8 +3,8 @@ const templates = {
   articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
   tagsLink: Handlebars.compile(document.querySelector('#template-tags-link').innerHTML),
   authorLink: Handlebars.compile(document.querySelector('#template-author-link').innerHTML),
-  tagCloudLink:Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML),
-  authorCloudLink:Handlebars.compile(document.querySelector('#template-author-cloud-link').innerHTML)
+  tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML),
+  authorCloudLink: Handlebars.compile(document.querySelector('#template-author-cloud-link').innerHTML)
 }
 function titleClickHandler(event){
   const clickedElement = this;
@@ -79,7 +79,7 @@ function calculateMinMax(tags){
     max: 0
   };
   for(let tag in tags){
-    console.log(tag + ' is used ' + tags[tag] + ' times');
+    //console.log(tag + ' is used ' + tags[tag] + ' times');
     if(tags[tag] > params.max){
       params.max = tags[tag];
     }
@@ -87,13 +87,13 @@ function calculateMinMax(tags){
       params.min = tags[tag];
     }
   }
-  console.log(params);
+  //console.log(params);
   return params;
 }
 
 function calculateClass(count,params){
-  console.log(count);
-  console.log(params.min);
+  //console.log(count);
+  //console.log(params.min);
   const normalizedCount = count - params.min;
   const normalizedMax = params.max - params.min;
   const percentage = normalizedCount / normalizedMax;
@@ -124,6 +124,7 @@ function generateTags(){
       const linkHTML = templates.tagsLink(linkHTMLData);
       /* add generated code to html variable */
       html = html + linkHTML;
+      
       /* [NEW] check if this link is NOT already in allTags */
       if(!allTags.hasOwnProperty(tag)){
         /* [NEW] add generated code to allTags array */
@@ -135,6 +136,7 @@ function generateTags(){
     }
     /* insert HTML of all the links into the tags wrapper */
     wrapperTags.innerHTML=html;
+    
   /* END LOOP: for every article: */
   }
   /* [NEW] find list of tags in right column */
@@ -143,12 +145,13 @@ function generateTags(){
   const allTagsData = {tags: []};
   for(let tag in allTags){
     allTagsData.tags.push({
-      tag: tag,
+      tag: tag ,
       count: allTags[tag],
       className: calculateClass(allTags[tag], tagsParams)
     });
   }
   tagList.innerHTML = templates.tagCloudLink(allTagsData);
+  console.log(templates.tagCloudLink(allTagsData));
 }
 
 generateTags();
@@ -164,7 +167,7 @@ function tagClickHandler(event){
   const tag = href.replace('#tag-', ''); 
 
   /* find all tag links with class active */
-  const allTags= clickedElement.querySelectorAll('a.active[href^="#tag-"]');
+  const allTags= document.querySelectorAll('a.active[href^="#tag-"]');
 
   /* START LOOP: for each active tag link */
   for (let tagList of allTags){
@@ -254,7 +257,7 @@ function authorClickHandler(event){
   const tag = href.replace('#author-', ''); 
 
   /* find all tag links with class active */
-  const allTags= clickedElement.querySelectorAll('a.active[href^="#author-"]');
+  const allTags= document.querySelectorAll('a.active[href^="#author-"]');
 
   /* START LOOP: for each active tag link */
   for (let tagList of allTags){
